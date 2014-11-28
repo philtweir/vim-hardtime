@@ -17,6 +17,7 @@ endf
 call s:check_defined("g:list_of_visual_keys", ["h", "j", "k", "l", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"])
 call s:check_defined("g:list_of_normal_keys", ["h", "j", "k", "l", "-", "+", "<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"])
 call s:check_defined("g:list_of_insert_keys", ["<UP>", "<DOWN>", "<LEFT>", "<RIGHT>"])
+call s:check_defined("g:list_of_allowed_keys", ["h", "j", "k", "l"])
 
 call s:check_defined("g:hardtime_default_on", 0)
 call s:check_defined("g:hardtime_ignore_buffer_patterns", [])
@@ -91,6 +92,10 @@ endf
 
 
 fun! TryKey(key)
+    if (index(g:list_of_allowed_keys, a:key) == -1)
+      return 0
+    endif
+
     let now = GetNow()
     if (now > s:lasttime + g:hardtime_timeout/1000) || (g:hardtime_allow_different_key && a:key != s:lastkey) ||
     \ (s:lastcount < g:hardtime_maxcount)
